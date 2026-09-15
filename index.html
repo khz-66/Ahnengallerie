@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animationen mit kontrollierbaren Aufhängern</title>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      background-color: lightblue;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    /* Gemeinsame Canvas-Skalierung für beide */
+    #avatar-animation-holder canvas,
+    #daria-animation-holder canvas {
+      display: block;
+      width: 120px !important;  
+      height: 120px !important; 
+    }
+
+    /* ======================================================================
+       ALLGEMEINE STYLES FÜR DIE NEUEN AUFHÄNGER
+       ====================================================================== */
+    .aufhaenger {
+      position: fixed;
+      width: 24px;
+      height: 20px;
+      background-color: #dbb04a; /* Messing-Gelb */
+      
+      /* EBENE: z-index 5 ist kleiner als 10, liegt also dahinter. */
+      /* HIER KANNST DU DIE EBENE ANPASSEN */
+      z-index: 5; 
+
+      /* Erzeugt die Dreiecklinie mit Transparenz in der Mitte */
+      clip-path: polygon(
+        50% 0%, 100% 100%, 0% 100%, 
+        50% 0%, 
+        50% 4px, 3px calc(100% - 2px), calc(100% - 3px) calc(100% - 2px), 50% 4px
+      );
+    }
+
+    .zentriert-abstand {
+  display: block;
+  margin-top: 200px;       /* Gewünschter Abstand nach oben (z.B. 50 Pixel) */
+  margin-left: auto;      /* Zentriert das Bild horizontal */
+  margin-right: auto;     /* Zentriert das Bild horizontal */
+}
+
+    .zentriert {
+  display: block;
+  margin-top: 20px;       /* Gewünschter Abstand nach oben (z.B. 50 Pixel) */
+  margin-left: auto;      /* Zentriert das Bild horizontal */
+  margin-right: auto;     /* Zentriert das Bild horizontal */
+}
+
+
+    /* ======================================================================
+       LINKS: AVATAR & SEIN AUFHÄNGER
+       ====================================================================== */
+    #avatar-animation-holder {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 4px solid #000000;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      overflow: hidden; 
+      z-index: 10; /* Bild liegt vorne */
+    }
+
+    #avatar-aufhaenger {
+      left: 68px; /* Horizontal zentriert (20px Abstand + 60px halbe Box - 12px halbes Dreieck) */
+      
+      /* Y-AUSRICHTUNG (HÖHE) FÜR AVATAR-DREIECK */
+      /* HIER KANNST DU DEN WERT ÄNDERN (Größer = weiter oben, Kleiner = weiter unten) */
+      top: 5px; 
+    }
+
+    /* ======================================================================
+       RECHTS: DARIA & IHR AUFHÄNGER
+       ====================================================================== */
+    #daria-animation-holder {
+      position: fixed;
+      top: 20px;
+      right: 20px; 
+      width: 120px;
+      height: 120px;
+      border: 4px solid #2d5a27; /* Grüner Rahmen */
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      overflow: hidden;
+      z-index: 10; /* Bild liegt vorne */
+    }
+
+    #daria-aufhaenger {
+      right: 68px; /* Horizontal zentriert auf der rechten Seite */
+      
+      /* Y-AUSRICHTUNG (HÖHE) FÜR DARIA-DREIECK */
+      /* HIER KANNST DU DEN WERT ÄNDERN (Größer = weiter oben, Kleiner = weiter unten) */
+      top: 5px; 
+    }
+
+.blasonierung {
+  font-family: "UnifrakturMaguntia", serif;
+  font-size: 1.15em;
+  line-height: 1.6;
+
+  max-width: 700px;       /* maximale Breite des Textblocks */
+  margin: 30px auto;      /* oben/unten 30px, horizontal automatisch zentriert */
+  padding: 0 30px;        /* Abstand zum Seitenrand */
+  box-sizing: border-box;
+
+  text-align: center;     /* Text selbst zentrieren */
+}
+    
+.blasonierung {
+  font-family: "UnifrakturMaguntia", serif;
+  font-size: 1em;
+  line-height: 1.2;
+}
+
+.blasonierung h2 {
+  font-family: "UnifrakturCook", serif;
+  font-size: 2.2em;
+}
+
+.blasonierung h3 {
+  font-family: "UnifrakturCook", serif;
+  font-size: 1.5em;
+}
+    
+  </style>
+</head>
+
+<body>
+
+  <div id="avatar-aufhaenger" class="aufhaenger"></div>
+  <div id="daria-aufhaenger" class="aufhaenger"></div>
+
+  <div id="avatar-animation-holder"></div>
+  <div id="daria-animation-holder"></div>
+
+  <img src="Wappen transparent.png" width="300" class="zentriert-abstand">
+
+<p>
+<div class="blasonierung">
+  <h2>Blasonierung</h2>
+
+  <h3>Schild</h3>
+  <p>
+    In Grün ein silberner Säulenkaktus mit goldenen Stacheln,
+    wachsend aus einem silbernen Dreiberg.
+  </p>
+
+  <p>
+    Oben rechts:
+    ein goldenes Zahnrad.
+  </p>
+
+  <p>
+    Oben links:
+    eine fliegende silberne Taube mit
+    grünem Olivenzweig im Schnabel.
+  </p>
+
+  <h3>Helm</h3>
+  <p>
+    Stechhelm, ungekrönt (bürgerlich).
+  </p>
+
+  <h3>Helmdecke</h3>
+  <p>
+    Grün und Silber, außen Grün, innen Silber.
+  </p>
+
+  <h3>Helmkleinod</h3>
+  <p>
+    Auf dem Helm ein schwarzer Turban, darauf ein
+    goldenes Zahnrad; darüber sitzend eine
+    silberne Taube, die einen
+    grünen Olivenzweig im Schnabel hält.
+  </p>
+
+  <h3>Wahlspruch</h3>
+  <p>
+    Auf einem silbernen Band unter dem Schild die Devise
+    „Pax et Creatio“.
+  </p>
+</div></p>
+
+  <img src="Wappen bw transparent.png" width="300" class="zentriert">
+
+<img src="Wappen siegel transparent.png" width="150" class="zentriert">
+
+  
+  <script>
+    // ----------------------------------------------------------------------
+    // P5.js Avatar Sketch (LINKS - Kreis)
+    // ----------------------------------------------------------------------
+    const avatarSketch = (p) => {
+      let img;
+      let blinkTimer = 0;
+      let pauseTimer = 0;       
+      let isBlinking = false;
+      let doubleBlinkQueue = false; 
+      let nextBlinkFrame = 200;     
+
+      p.preload = () => {
+        img = p.loadImage('mered.jpg'); 
+      };
+
+      p.setup = () => {
+        let canvas = p.createCanvas(350, 350);
+        canvas.parent('avatar-animation-holder');
+      };
+
+      p.draw = () => {
+        p.clear();
+        if (img) {
+          p.image(img, 0, 0, p.width, p.height);
+        }
+
+        if (p.frameCount >= nextBlinkFrame && !isBlinking && pauseTimer <= 0) {
+          isBlinking = true;
+          blinkTimer = 10; 
+          doubleBlinkQueue = p.random(1) < 0.1; 
+          nextBlinkFrame = p.frameCount + p.floor(p.random(200, 250));
+        }
+
+        if (isBlinking) {
+          blinkEyes();
+          blinkTimer--;
+          
+          if (blinkTimer <= 0) {
+            isBlinking = false;
+            if (doubleBlinkQueue) {
+              doubleBlinkQueue = false; 
+              pauseTimer = 6; 
+            }
+          }
+        }
+        
+        if (pauseTimer > 0) {
+          pauseTimer--;
+          if (pauseTimer === 0) {
+            isBlinking = true;
+            blinkTimer = 10;
+          }
+        }
+           
+        p.stroke(0);          
+        p.strokeWeight(6);    
+        p.fill(183, 189, 189);          
+        p.ellipse(175, 185, 170, 120);
+      };
+
+      function blinkEyes() {
+        p.push(); 
+        p.stroke(0);          
+        p.strokeWeight(6);    
+        p.fill(183, 189, 189);          
+
+        p.ellipse(135, 115, 70, 70); 
+        p.ellipse(205, 115, 75, 75); 
+
+        p.strokeWeight(5);
+        p.line(130, 115, 174, 115); 
+        p.line(176, 115, 220, 115); 
+        p.pop(); 
+      }
+    };
+
+    new p5(avatarSketch);
+
+
+    // ----------------------------------------------------------------------
+    // P5.js Daria Sketch (RECHTS - Quadrat)
+    // ----------------------------------------------------------------------
+    const dariaSketch = (p) => {
+      let baseImg;
+      let isBlinking = false;
+      let nextBlinkTime = 0;
+      let blinkDuration = 150; 
+      let blinkStart = 0;
+
+      let isLookingLeft = false;
+      let lookStart = 0;
+      let lookDuration = 0;
+      let nextLookTime = 0;
+
+      p.preload = () => {
+        baseImg = p.loadImage('daria base.jpg');
+      };
+
+      p.setup = () => {
+        let canvas = p.createCanvas(baseImg.width, baseImg.height);
+        canvas.parent('daria-animation-holder');
+        scheduleNextBlink();
+        scheduleNextLook();
+      };
+
+      p.draw = () => {
+        p.background(220);
+        if (baseImg) {
+          p.image(baseImg, 0, 0);
+        }
+
+        if (!isBlinking && p.millis() > nextBlinkTime) {
+          isBlinking = true;
+          blinkStart = p.millis();
+        }
+
+        if (isBlinking) {
+          if (p.millis() - blinkStart > blinkDuration) {
+            isBlinking = false;
+            scheduleNextBlink();
+          }
+          return; 
+        }
+
+        if (!isLookingLeft && p.millis() > nextLookTime) {
+          isLookingLeft = true;
+          lookStart = p.millis();
+          lookDuration = p.random(1000, 2000); 
+        }
+
+        if (isLookingLeft && p.millis() - lookStart > lookDuration) {
+          isLookingLeft = false;
+          scheduleNextLook();
+        }
+
+        let leftX = 130;
+        let rightX = 232;
+        let eyeY = 165;
+        let lineWidth = 40;
+
+        drawMinimalEye(leftX, eyeY, lineWidth, isLookingLeft);
+        drawMinimalEye(rightX, eyeY, lineWidth, isLookingLeft);
+      };
+
+      function drawMinimalEye(centerX, centerY, w, lookLeft) {
+        p.stroke(0);
+        p.strokeWeight(6);
+        p.line(centerX - w/2, centerY, centerX + w/2, centerY);
+
+        p.strokeWeight(15);
+        let offset = lookLeft ? -12 : 0; 
+        p.point(centerX + offset, centerY + 4);
+      }
+
+      function scheduleNextBlink() {
+        nextBlinkTime = p.millis() + p.random(2000, 6000);
+      }
+
+      function scheduleNextLook() {
+        nextLookTime = p.millis() + p.random(3000, 9000);
+      }
+    };
+
+    new p5(dariaSketch);
+  </script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Daria‑Augen Inline</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+</head>
+<body>
+  <script>
+    let baseImg;
+
+    // --- Blinzeln ---
+    let isBlinking = false;
+    let nextBlinkTime = 0;
+    let blinkDuration = 150; // ms
+    let blinkStart = 0;
+
+    // --- Blick zur Seite ---
+    let isLookingLeft = false;
+    let lookStart = 0;
+    let lookDuration = 0;
+    let nextLookTime = 0;
+
+    function preload() {
+      baseImg = loadImage('daria base.jpg');
+    }
+
+    function setup() {
+      createCanvas(baseImg.width, baseImg.height);
+      scheduleNextBlink();
+      scheduleNextLook();
+    }
+
+    function draw() {
+      background(220);
+      image(baseImg, 0, 0);
+
+      // --- Blinzel-Logik ---
+      if (!isBlinking && millis() > nextBlinkTime) {
+        isBlinking = true;
+        blinkStart = millis();
+      }
+
+      if (isBlinking) {
+        if (millis() - blinkStart > blinkDuration) {
+          isBlinking = false;
+          scheduleNextBlink();
+        }
+        return; // Augen nicht zeichnen → Blinzeln
+      }
+
+      // --- Blick-nach-links-Logik ---
+      if (!isLookingLeft && millis() > nextLookTime) {
+        isLookingLeft = true;
+        lookStart = millis();
+        lookDuration = random(1000, 2000); // 1–2 Sekunden
+      }
+
+      if (isLookingLeft && millis() - lookStart > lookDuration) {
+        isLookingLeft = false;
+        scheduleNextLook();
+      }
+
+      // Augenpositionen
+      let leftX = 130;
+      let rightX = 232;
+      let eyeY = 165;
+
+      let lineWidth = 40;
+
+      drawMinimalEye(leftX, eyeY, lineWidth, isLookingLeft);
+      drawMinimalEye(rightX, eyeY, lineWidth, isLookingLeft);
+    }
+
+    function drawMinimalEye(centerX, centerY, w, lookLeft) {
+      stroke(0);
+      strokeWeight(6);
+
+      // Waagerechter Strich
+      line(centerX - w/2, centerY, centerX + w/2, centerY);
+
+      // Punkt etwas darunter
+      strokeWeight(15);
+
+      let offset = lookLeft ? -12 : 0; // Blick nach links
+      point(centerX + offset, centerY + 4);
+    }
+
+    function scheduleNextBlink() {
+      nextBlinkTime = millis() + random(2000, 6000);
+    }
+
+    function scheduleNextLook() {
+      nextLookTime = millis() + random(3000, 9000);
+    }
+  </script>
+</body>
+</html>
