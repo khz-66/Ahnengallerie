@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Animationen mit kontrollierbaren Aufhängern</title>
+  <title>Ahnengalerie</title>
   
+  <link rel="stylesheet" href="/css/styles.css">
+ 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,12 +17,21 @@
     body {
       background-color: lightblue;
       margin: 0;
-      padding: 0;
+      padding: 2vh;
       min-height: 100vh;
+      margin-top: 150px; 
     }
 
+p {
+  color: darkslategray;
+}
+    
+    figcaption {
+  color: darkslategray !important;
+    }
+    
     /* Gemeinsame Canvas-Skalierung für beide */
-    #avatar-animation-holder canvas,
+    #avatar-animation-holder canvas, 
     #daria-animation-holder canvas {
       display: block;
       width: 120px !important;  
@@ -48,19 +59,6 @@
       );
     }
 
-    .zentriert-abstand {
-  display: block;
-  margin-top: 200px;       /* Gewünschter Abstand nach oben (z.B. 50 Pixel) */
-  margin-left: auto;      /* Zentriert das Bild horizontal */
-  margin-right: auto;     /* Zentriert das Bild horizontal */
-}
-
-    .zentriert {
-  display: block;
-  margin-top: 20px;       /* Gewünschter Abstand nach oben (z.B. 50 Pixel) */
-  margin-left: auto;      /* Zentriert das Bild horizontal */
-  margin-right: auto;     /* Zentriert das Bild horizontal */
-}
 
 
     /* ======================================================================
@@ -73,7 +71,7 @@
       width: 120px;
       height: 120px;
       border-radius: 50%;
-      border: 4px solid #000000;
+      border: 4px solid #586f8f; 
       box-shadow: 0 4px 8px rgba(0,0,0,0.3);
       overflow: hidden; 
       z-index: 10; /* Bild liegt vorne */
@@ -127,17 +125,30 @@
   font-family: "UnifrakturMaguntia", serif;
   font-size: 1em;
   line-height: 1.2;
+  
 }
-
+.blasonierung p {
+  color: darkslategray !important;
+}
 .blasonierung h2 {
   font-family: "UnifrakturCook", serif;
   font-size: 2.2em;
+  color: darkslategray !important;
 }
 
 .blasonierung h3 {
   font-family: "UnifrakturCook", serif;
   font-size: 1.5em;
+  color: darkslategray !important;
 }
+
+    #ahnengalerie-title {
+  font-family: serif !important;
+  font-weight: bold !important;
+  color: #000000 !important;
+  text-align: center !important;
+}
+
     
   </style>
 </head>
@@ -150,9 +161,44 @@
   <div id="avatar-animation-holder"></div>
   <div id="daria-animation-holder"></div>
 
-  <img src="Wappen transparent.png" width="300" class="zentriert-abstand">
+<h1 id="ahnengalerie-title">Ahnen&shy;galerie</h1>
+  
+<h2>Der dubiose Onkel aus der Levante</h2>
+  
+    <figure id="bild" class="image-figure small">
+      <img src="kara photo.jpg" alt="Beschreibung" loading="lazy">
+      <figcaption>Kara Sayed‑al‑Dar ibn al‑Ḥaddād<br>al‑Lāwāntī Rabb al‑Handasa</figcaption>
+    </figure>
 
-<p>
+  <p>Mit einer verhängnisvollen Neigung zum Okkultismus.</p>
+  
+<h2>Der verkrachte Intellektuelle aus Polen</h2>
+  
+    <figure id="bild" class="image-figure small">
+      <img src="karol zubrowsky.png" alt="Beschreibung" loading="lazy">
+      <figcaption>Karol Zubrowsky, Ingenieur aus Rzeszów, 1938</figcaption>
+    </figure>
+
+  <p>Der das Erbe seiner Industriellenfamilie mit der Entwicklung von Orgon-Technologie durchgebracht hat.</p>
+  
+  <h2>Der Gründer von Scrapple</h2>
+   
+    <figure id="bild" class="image-figure small">
+      <img src="chuck huber foto.jpg" alt="Beschreibung" loading="lazy">
+      <figcaption></figcaption>
+    </figure>
+
+  <p>Chuck Huber siedelte sein IT Startup "Scrapple" nicht im langweiligen Silicon Valley an, sondern im boomenden Detroit.
+  (Die Einwanderungsbehörde hat den Namen falsch registriert)</p>
+
+<h2>Ein bürgerliches Wappen</h2>
+
+    <figure id="bild" class="image-figure small">
+      <img src="Wappen transparent.png" alt="Beschreibung" loading="lazy">
+      <figcaption></figcaption>
+    </figure>
+
+
 <div class="blasonierung">
   <h2>Blasonierung</h2>
 
@@ -196,12 +242,20 @@
     Auf einem silbernen Band unter dem Schild die Devise
     „Pax et Creatio“.
   </p>
-</div></p>
 
-  <img src="Wappen bw transparent.png" width="300" class="zentriert">
+  <h3>Schraffur und Siegel</h3>
+</div>
 
-<img src="Wappen siegel transparent.png" width="150" class="zentriert">
-
+<div class="image-row no-break">
+      <figure class="image-item">
+        <a href="Wappen bw transparent.png"><img src="Wappen bw transparent.png" alt="" style="height: 250px !important; width: auto !important;"></a>
+        <figcaption></figcaption>
+      </figure>
+      <figure class="image-item">
+        <a href="Wappen siegel transparent.png"><img src="Wappen siegel transparent.png" alt="" style="height: 240px !important; width: auto !important;"></a>
+        <figcaption></figcaption>
+      </figure>
+    </div>
   
   <script>
     // ----------------------------------------------------------------------
